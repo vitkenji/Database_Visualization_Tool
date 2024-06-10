@@ -3,10 +3,10 @@
 Ferramenta "semi-gráfica" de visualização de bancos de dados
 
 OBSERVAÇÕES:
--este trabalho poderá ser realizado em equipes de até 2 pessoas
--o trabalho deverá ser entregue com os códigos fontes em Python ou Java, e um relatório mostrando as funcionalidades e utilização do programa, além de detalhes da sua instalação e dependências
--a entrega deverá ser feita por somente um dos alunos da dupla
--o programa será testado em sistema operacional Linux, com Python 3.10.x
+ - este trabalho poderá ser realizado em equipes de até 2 pessoas
+ - o trabalho deverá ser entregue com os códigos fontes em Python ou Java, e um relatório mostrando as funcionalidades e utilização do programa, além de detalhes da sua instalação e dependências
+ - a entrega deverá ser feita por somente um dos alunos da dupla
+ - o programa será testado em sistema operacional Linux, com Python 3.10.x
 
 
 Desenvolver um programa em Python/Java (interface texto) com as seguintes características:
