@@ -1,8 +1,10 @@
 from tkinter import *
 
 def main():
-    print("hello world")
-
+    window = Tk()
+    window.geometry('800x600')
+    initialForm(window)
+    window.mainloop()
 
 
 if __name__ == "__main__":
