@@ -1,82 +1,15 @@
 from tkinter import *
 from tkinter import ttk
-import mysql.connector
+from Connector import MySQLConnector
 
 def main():
-    createLoginWindow()
+    create_login_window()
 
-mydb = 0
-cursor = 0
 user_global = ""
 password_global = ""
+db_connector = None
 
-def connectToSQL(user, password):
-    global mydb
-    global cursor
-
-    try:
-        mydb = mysql.connector.connect(
-            host="localhost",
-            user=user,
-            password=password
-        )
-
-        cursor = mydb.cursor()
-        cursor.execute("show databases")
-        response = cursor.fetchall()
-
-        return True, response
-
-    except mysql.connector.Error as err:
-        print("error")
-        return False, []
-
-def selectSchema(schema):
-    global mydb
-    global cursor
-    global user_global
-    global password_global
-
-    try:
-        mydb = mysql.connector.connect(
-            host="localhost",
-            user=user_global,
-            password=password_global,
-            database=schema
-        )
-        cursor = mydb.cursor()
-        return True
-    except mysql.connector.Error as err:
-        print("error")
-        return False
-
-def getColumnInformation(column):
-    global mydb
-    global cursor
-
-    if not mydb or not cursor:
-        print("Error: no database connected")
-        return
-
-    if ' ' in column:
-        print("Error: weird column name")
-        return
-
-    cursor.execute(f"describe `{column}`")
-    
-    response = cursor.fetchall()
-
-    print(response)
-
-def createTable(window):
-    height = 3
-    width = 5
-    for i in range(height): #Rows
-        for j in range(width): #Columns
-            b = ttk.Entry(window, text="sample Text")
-            b.grid(row=i+4, column=j+1)
-
-def createLoginWindow():
+def create_login_window():
     login_window = Tk()
     login_window.title("Databases:")
     login_window.geometry('400x300')
@@ -97,31 +30,32 @@ def createLoginWindow():
     db_type_combo.grid(column=1, row=2, sticky=(W, E), pady=5)
     db_type_combo.current(0)
 
-    login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
-    login_button.grid(column=1, row=3, sticky=(W), pady=5)
-
     error_lbl = Label(frm, text="", fg="red")
     error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
+
+    login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
+    login_button.grid(column=1, row=3, sticky=(W), pady=5)
 
     login_window.mainloop()
 
 def login(user_input, pass_input, error_lbl, login_window):
-    global user_global, password_global
+    global user_global, password_global, db_connector
     user = user_input.get()
     password = pass_input.get()
     user_global = user
     password_global = password
-    success, schemas = connectToSQL(user, password)
-    if(success):
+    db_connector = MySQLConnector(user, password)
+    success, schemas = db_connector.connect()
+    if success:
         print("successful login")
         error_lbl.config(text="")
         login_window.destroy()
-        selectSchemaWindow(schemas)
+        select_schema_window(schemas)
     else:
         print("error")
         error_lbl.config(text="user and/or password incorrect")
 
-def selectSchemaWindow(schemas):
+def select_schema_window(schemas):
     schema_window = Tk()
     schema_window.title("Select Schema:")
     schema_window.geometry('400x300')
@@ -135,21 +69,21 @@ def selectSchemaWindow(schemas):
     db_combo.grid(column=1, row=0, pady=5)
     db_combo.current(0)
 
-    schema_button = ttk.Button(frm, text="Select", command=lambda: schemaSelected(db_var.get(), schema_window))
+    schema_button = ttk.Button(frm, text="Select", command=lambda: schema_selected(db_var.get(), schema_window))
     schema_button.grid(column=1, row=1, sticky=(W), pady=5)
 
     schema_window.mainloop()
 
-def schemaSelected(schema, db_window):
-    success = selectSchema(schema)
-    if(success):
+def schema_selected(schema, db_window):
+    success = db_connector.select_schema(schema)
+    if success:
         print("schema selected")
         db_window.destroy()
-        viewDbWindow()
+        view_db_window()
     else:
         print("error")
 
-def viewDbWindow():
+def view_db_window():
     db_window = Tk()
     db_window.title("Database Operations:")
     db_window.geometry('400x300')
@@ -158,8 +92,16 @@ def viewDbWindow():
     frm.grid()
 
     ttk.Label(frm, text="Database operations").grid(column=0, row=0, columnspan=2, pady=5)
-    createTable(db_window)
+    create_table(db_window)
     db_window.mainloop()
+
+def create_table(window):
+    height = 3
+    width = 5
+    for i in range(height): # Rows
+        for j in range(width): # Columns
+            b = ttk.Entry(window, text="sample Text")
+            b.grid(row=i+4, column=j+1)
 
 if __name__ == "__main__":
     main()
