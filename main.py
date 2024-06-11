@@ -3,7 +3,7 @@ from tkinter import ttk
 import mysql.connector
 
 def main():
-    createWindow()
+    createLoginWindow()
 
 mydb = 0
 cursor = 0
@@ -72,12 +72,12 @@ def createTable(window):
             b = ttk.Entry(window, text="sample Text")
             b.grid(row=i+4, column=j+1)
 
-def createWindow():
-    window = Tk()
-    window.title("Databases:")
-    window.geometry('400x300')
+def createLoginWindow():
+    login_window = Tk()
+    login_window.title("Databases:")
+    login_window.geometry('400x300')
 
-    frm = ttk.Frame(window, padding=20)
+    frm = ttk.Frame(login_window, padding=20)
     frm.grid()
     ttk.Label(frm, text="User: ").grid(column=0, row=0, sticky=E, pady=5)
     user_input = ttk.Entry(frm)
@@ -93,30 +93,40 @@ def createWindow():
     db_type_combo.grid(column=1, row=2, sticky=(W, E), pady=5)
     db_type_combo.current(0) 
 
-    login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl))
+    login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
     login_button.grid(column=1, row=3, sticky=(W), pady=5)
 
     error_lbl = Label(frm, text="", fg="red")
     error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
 
-    createTable(window)
+    login_window.mainloop()
 
-    window.mainloop()
-
-def login(user_input, pass_input, error_lbl):
+def login(user_input, pass_input, error_lbl, login_window):
     user = user_input.get()
     password = pass_input.get()
     success = connectToSQL(user, password)
     if(success):
         print("successful login")
         error_lbl.config(text="")
-
+        login_window.destroy()
+        openDbWindow()
         getColumnInformation('student')
 
     else:
         print("error")
         error_lbl.config(text="user and/or password incorrect")
 
+def openDbWindow():
+    db_window = Tk()
+    db_window.title("select database:")
+    db_window.geometry('400x300')
+
+    frm = ttk.Frame(db_window, padding=20)
+    frm.grid()
+
+    ttk.Label(frm, text="Database operations").grid(column=0, row=0, columnspan=2, pady=5)
+    createTable(db_window)
+    db_window.mainloop()
 
 if __name__ == "__main__":
     main()
