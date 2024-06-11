@@ -5,8 +5,14 @@ import mysql.connector
 def main():
     createWindow()
 
+mydb = 0
+cursor = 0
 
 def connectToSQL(user, password):
+
+    global mydb
+    global cursor
+
     try:
         mydb = mysql.connector.connect(
             host="localhost",
@@ -17,25 +23,54 @@ def connectToSQL(user, password):
 
         cursor = mydb.cursor()
 
+        
+
         cursor.execute("show tables")
 
         respose = cursor.fetchall()
         
-        print(respose)
+        # print(respose)
 
         cursor.execute("select * from department")
 
         respose = cursor.fetchall()
 
-        print(respose)
+        # print(respose)
         
-        print(mydb)
+        # print(mydb)
+
         return True
 
     except mysql.connector.Error as err:
         print("error")
         return False
-        
+
+def getColumnInformation(column):
+
+    global mydb
+    global cursor
+
+    if not mydb or not cursor:
+        print("Error: no database connected")
+        return
+
+    if ' ' in column:
+        print("Error: weird column name")
+        return
+
+    cursor.execute(f"describe `{column}`")
+    
+    response = cursor.fetchall()
+
+    print(response)
+
+def createTable(window):
+    height = 3
+    width = 5
+    for i in range(height): #Rows
+        for j in range(width): #Columns
+            b = ttk.Entry(window, text="sample Text")
+            b.grid(row=i+4, column=j+1)
 
 def createWindow():
     window = Tk()
@@ -64,6 +99,8 @@ def createWindow():
     error_lbl = Label(frm, text="", fg="red")
     error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
 
+    createTable(window)
+
     window.mainloop()
 
 def login(user_input, pass_input, error_lbl):
@@ -73,6 +110,9 @@ def login(user_input, pass_input, error_lbl):
     if(success):
         print("successful login")
         error_lbl.config(text="")
+
+        getColumnInformation('student')
+
     else:
         print("error")
         error_lbl.config(text="user and/or password incorrect")
