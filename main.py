@@ -2,42 +2,71 @@ from tkinter import *
 from tkinter import ttk
 import mysql.connector
 
-def connectToSQL():
-    import mysql.connector
+def main():
+    createWindow()
 
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root",
-        database="honeyhub"
-    )
 
-    print('teste')
+def connectToSQL(user, password):
+    try:
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user= user,
+            password = password,
+            database="university"
+        )
 
-    cursor = mydb.cursor()
+        cursor = mydb.cursor()
 
-    cursor.execute("show tables")
+        cursor.execute("show tables")
 
-    respose = cursor.fetchall()
-    
-    print(respose)
+        respose = cursor.fetchall()
+        
+        print(respose)
 
-    cursor.execute("select * from community")
+        cursor.execute("select * from department")
 
-    respose = cursor.fetchall()
+        respose = cursor.fetchall()
 
-    print(respose)
-    
-    print(mydb)
+        print(respose)
+        
+        print(mydb)
+        return True
 
-connectToSQL()
+    except mysql.connector.Error as err:
+        print("error")
+        return False
+        
 
-root = Tk()
-frm = ttk.Frame(root, padding=10)
+def createWindow():
+    window = Tk()
+    window.title("Databases:")
+    window.geometry('400x300')
 
-frm.grid()
+    frm = ttk.Frame(window, padding=20)
+    frm.grid()
+    ttk.Label(frm, text="User: ").grid(column=0, row=0, sticky=E)
+    user_input = ttk.Entry(frm)
+    user_input.grid(column=1, row=0, sticky=(W, E))
 
-ttk.Label(frm, text="Hello World!").grid(column=0, row=0)
-ttk.Button(frm, text="Quit", command=root.destroy).grid(column=1, row=0)
+    ttk.Label(frm, text="Password: ").grid(column=0, row=1, sticky=E)
+    pass_input = ttk.Entry(frm, show="*")
+    pass_input.grid(column=1, row=1, sticky=(W, E))
 
-root.mainloop()
+    login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input))
+    login_button.grid(column=1, row=2, sticky=(W))
+
+    window.mainloop()
+
+def login(user_input, pass_input):
+    user = user_input.get()
+    password = pass_input.get()
+    success = connectToSQL(user, password)
+    if(success):
+        print("successful login")
+    else:
+        print("error")
+
+
+
+if __name__ == "__main__":
+    main()
