@@ -48,3 +48,15 @@ class MySQLConnector:
         self.cursor.execute(f"DESCRIBE `{column}`")
         response = self.cursor.fetchall()
         print(response)
+
+    def executeQuery(self, query):
+        try:
+            self.cursor.execute(query)
+            result = self.cursor.fetchall()
+            return result
+
+        except mysql.connector.Error as err:
+            print("error executing query")
+            return None
+    
+

@@ -99,21 +99,30 @@ def view_db_window():
     query = ttk.Entry(frm, width=50)
     query.grid(column=1, row=0, sticky=(W, E), pady=5)
 
-    execute_button = ttk.Button(frm, text="Execute", command=lambda: executeQuery(query, db_window))
+    execute_button = ttk.Button(frm, text="Execute", command=lambda: executeQuery(query.get(), db_window))
     execute_button.grid(column=2, row=0, sticky=(W), pady=5)
     
     db_window.mainloop()
 
-def create_table(window):
-    height = 3
-    width = 5
+def create_table(window, data):
+    height = len(data)
+    width = len(data[0])
+
     for i in range(height): # Rows
         for j in range(width): # Columns
-            b = ttk.Entry(window, text="sample Text")
-            b.grid(row=i+4, column=j+1)
+            b = ttk.Entry(window)
+            b.insert(0, data[i][j])
+            b.grid(row=i, column=j)
+            b.place(x=20 + j*100, y=80 + i*21)
+            
 
 def executeQuery(query, db_window):
-    create_table(db_window)
+    global db_connector
+    result = db_connector.executeQuery(query)
+    if result:
+        create_table(db_window, result)
+    else:
+        print("error executing query")
 
 if __name__ == "__main__":
     main()
