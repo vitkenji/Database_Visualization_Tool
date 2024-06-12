@@ -52,9 +52,13 @@ def login(user_input, pass_input, error_lbl, login_window):
         login_window.destroy()
         select_schema_window(schemas)
     else:
-        print("error")
-        error_lbl.config(text="user and/or password incorrect")
-
+        if user == "" or password == "":
+            print("empty spaces")
+            error_lbl.config(text="fill all blank spaces")
+        else:
+            print("error")
+            error_lbl.config(text="user and/or password incorrect")
+  
 def select_schema_window(schemas):
     schema_window = Tk()
     schema_window.title("Select Schema:")
@@ -91,11 +95,11 @@ def view_db_window():
     frm = ttk.Frame(db_window, padding=20)
     frm.grid()
 
-    ttk.Label(frm, text="Type the query: ").grid(column=0, row=0, sticky=E, pady=5)
+    ttk.Label(frm, text="Type query: ").grid(column=0, row=0, sticky=E, pady=5)
     query = ttk.Entry(frm, width=50)
     query.grid(column=1, row=0, sticky=(W, E), pady=5)
 
-    execute_button = ttk.Button(frm, text="Execute")
+    execute_button = ttk.Button(frm, text="Execute", command=lambda: executeQuery(query, db_window))
     execute_button.grid(column=2, row=0, sticky=(W), pady=5)
     
     db_window.mainloop()
@@ -107,6 +111,9 @@ def create_table(window):
         for j in range(width): # Columns
             b = ttk.Entry(window, text="sample Text")
             b.grid(row=i+4, column=j+1)
+
+def executeQuery(query, db_window):
+    create_table(db_window)
 
 if __name__ == "__main__":
     main()
