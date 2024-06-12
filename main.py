@@ -86,13 +86,18 @@ def schema_selected(schema, db_window):
 def view_db_window():
     db_window = Tk()
     db_window.title("Database Operations:")
-    db_window.geometry('400x300')
+    db_window.geometry('800x600')
 
     frm = ttk.Frame(db_window, padding=20)
     frm.grid()
 
-    ttk.Label(frm, text="Database operations").grid(column=0, row=0, columnspan=2, pady=5)
-    create_table(db_window)
+    ttk.Label(frm, text="Type the query: ").grid(column=0, row=0, sticky=E, pady=5)
+    query = ttk.Entry(frm, width=50)
+    query.grid(column=1, row=0, sticky=(W, E), pady=5)
+
+    execute_button = ttk.Button(frm, text="Execute")
+    execute_button.grid(column=2, row=0, sticky=(W), pady=5)
+    
     db_window.mainloop()
 
 def create_table(window):
