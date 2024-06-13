@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from Connector import MySQLConnector
+from Table import Table
 
 def main():
     create_login_window()
@@ -16,6 +17,7 @@ def create_login_window():
 
     frm = ttk.Frame(login_window, padding=20)
     frm.grid()
+    
     ttk.Label(frm, text="User: ").grid(column=0, row=0, sticky=E, pady=5)
     user_input = ttk.Entry(frm)
     user_input.grid(column=1, row=0, sticky=(W, E), pady=5)
@@ -26,7 +28,7 @@ def create_login_window():
 
     db_type_var = StringVar()
     ttk.Label(frm, text="Select database: ").grid(column=0, row=2, sticky=E, pady=5)
-    db_type_combo = ttk.Combobox(frm, textvariable=db_type_var, values=["MySQL", "PostgreSQL"])
+    db_type_combo = ttk.Combobox(frm, textvariable=db_type_var, values=["MySQL", "Postgres"])
     db_type_combo.grid(column=1, row=2, sticky=(W, E), pady=5)
     db_type_combo.current(0)
 
@@ -104,23 +106,12 @@ def view_db_window():
     
     db_window.mainloop()
 
-def create_table(window, data):
-    height = len(data)
-    width = len(data[0])
-
-    for i in range(height): # Rows
-        for j in range(width): # Columns
-            b = ttk.Entry(window)
-            b.insert(0, data[i][j])
-            b.grid(row=i, column=j)
-            b.place(x=20 + j*100, y=80 + i*21)
-            
-
 def executeQuery(query, db_window):
     global db_connector
     result = db_connector.executeQuery(query)
     if result:
-        create_table(db_window, result)
+        table = Table(db_window, result)
+        table.create_table()
     else:
         print("error executing query")
 
