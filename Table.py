@@ -3,9 +3,10 @@ from tkinter import ttk
 # TODO: texts that are to big get hidden
 
 class Table:
-    def __init__(self, window, data):
+    def __init__(self, window, data, column_names):
         self.window = window
         self.data = data
+        self.column_names = column_names
 
     def create_table(self):
         height = len(self.data)
@@ -34,13 +35,14 @@ class Table:
         frame.grid_columnconfigure(0, weight=1)
 
         # Define the column headings
-        for i in range(1, width+1):
-            tree.heading(f'#{i}', text=f'Column {i}')
-            tree.column(f'#{i}', width=width, anchor='center')
+        for i, col_name in enumerate(self.column_names):
+            tree.heading(f'#{i+1}', text=col_name)
+            tree.column(f'#{i+1}', width=100, anchor='center')  # You might want to adjust the width
 
         # Insert the data into the table
         for row in self.data:
             tree.insert('', 'end', values=row)
+
 
         # for i in range(height): # Rows
         #     for j in range(width): # Columns

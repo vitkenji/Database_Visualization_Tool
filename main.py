@@ -110,10 +110,12 @@ def executeQuery(query, db_window):
     global db_connector
     result = db_connector.executeQuery(query)
     if result:
-        table = Table(db_window, result)
+        column_names = [desc[0] for desc in db_connector.cursor.description]  # Obtaining column names
+        table = Table(db_window, result, column_names)
         table.create_table()
     else:
         print("error executing query")
+
 
 if __name__ == "__main__":
     main()
