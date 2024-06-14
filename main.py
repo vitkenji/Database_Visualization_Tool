@@ -86,11 +86,11 @@ def schema_selected(schema, db_window):
     if success:
         print("schema selected")
         db_window.destroy()
-        view_db_window()
+        view_db_window(schema)
     else:
         print("error")
 
-def view_db_window():
+def view_db_window(schema):
     db_window = Tk()
     db_window.title("Database Operations:")
     db_window.geometry('1500x800')
@@ -112,7 +112,7 @@ def view_db_window():
     frm_right.grid(row=0, column=1, sticky="nsew")
 
     tree_view = Tree(frm_right, db_connector)
-    tree_view.populate_tree()
+    tree_view.populate_tree(schema)
 
     db_window.grid_columnconfigure(0, weight=1)
     db_window.grid_columnconfigure(1, weight=1)

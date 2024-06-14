@@ -1,5 +1,4 @@
 from tkinter import ttk
-from Connector import MySQLConnector
 
 class Tree:
     def __init__(self, window, db_connector):
@@ -7,7 +6,7 @@ class Tree:
         self.db_connector = db_connector
         self.tree = None
 
-    def populate_tree(self):
+    def populate_tree(self, schema):
         self.tree = ttk.Treeview(self.window)
         self.tree.grid(column=0, row=0, sticky='nsew')
 
@@ -28,15 +27,12 @@ class Tree:
         self.tree.heading("null", text="Nullable")
         self.tree.heading("default", text="Default")
 
-        databases = self.db_connector.get_databases()
-        for database in databases:
-            tables = self.db_connector.get_tables(database)
-            db_node = self.tree.insert("", "end", text=database)
-            for table in tables:
-                table_node = self.tree.insert(db_node, "end", text=table)
-                columns = self.db_connector.get_columns(database, table)
-                for column in columns:
-                    self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
+        tables = self.db_connector.get_tables(schema)
+        for table in tables:
+            table_node = self.tree.insert("", "end", text=table)
+            columns = self.db_connector.get_columns(schema, table)
+            for column in columns:
+                self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
 
         self.tree.bind("<Double-1>", self.on_double_click)
 
@@ -51,4 +47,3 @@ class Tree:
             columns = self.db_connector.get_columns(database, table)
             for column in columns:
                 self.tree.insert(item, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
-
