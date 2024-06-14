@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from Connector import MySQLConnector
 from Table import Table
+from Tree import Tree
 
 def main():
     create_login_window()
@@ -92,25 +93,39 @@ def schema_selected(schema, db_window):
 def view_db_window():
     db_window = Tk()
     db_window.title("Database Operations:")
-    db_window.geometry('800x600')
+    db_window.geometry('1500x800')
 
-    frm = ttk.Frame(db_window, padding=20)
-    frm.grid()
+    frm_left = ttk.Frame(db_window, padding=20)
+    frm_left.grid(row=0, column=0, sticky="nsew")
 
-    ttk.Label(frm, text="Type query: ").grid(column=0, row=0, sticky=E, pady=5)
-    query = ttk.Entry(frm, width=50)
+    ttk.Label(frm_left, text="Type query: ").grid(column=0, row=0, sticky=E, pady=5)
+    query = ttk.Entry(frm_left, width=50)
     query.grid(column=1, row=0, sticky=(W, E), pady=5)
 
-    execute_button = ttk.Button(frm, text="Execute", command=lambda: executeQuery(query.get(), db_window))
+    execute_button = ttk.Button(frm_left, text="Execute", command=lambda: executeQuery(query.get(), db_window))
     execute_button.grid(column=2, row=0, sticky=(W), pady=5)
-    
+
+    result_frame = ttk.Frame(frm_left)
+    result_frame.grid(column=0, row=1, columnspan=3, pady=10, sticky="nsew")
+
+    frm_right = ttk.Frame(db_window, padding=20)
+    frm_right.grid(row=0, column=1, sticky="nsew")
+
+    tree_view = Tree(frm_right, db_connector)
+    tree_view.populate_tree()
+
+    db_window.grid_columnconfigure(0, weight=1)
+    db_window.grid_columnconfigure(1, weight=1)
+    db_window.grid_rowconfigure(0, weight=1)
+
     db_window.mainloop()
+
 
 def executeQuery(query, db_window):
     global db_connector
-    result = db_connector.executeQuery(query)
+    result = db_connector.execute_query(query)
     if result:
-        column_names = [desc[0] for desc in db_connector.cursor.description]  # Obtaining column names
+        column_names = [desc[0] for desc in db_connector.cursor.description] 
         table = Table(db_window, result, column_names)
         table.create_table()
     else:
