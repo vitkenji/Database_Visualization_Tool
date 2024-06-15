@@ -1,8 +1,9 @@
 from tkinter import *
 from tkinter import ttk
-from Connector import MySQLConnector
+from MySQLConnector import MySQLConnector
 from Table import Table
 from Tree import Tree
+
 
 def main():
     create_login_window()

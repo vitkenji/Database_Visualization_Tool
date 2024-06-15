@@ -82,3 +82,4 @@ class MySQLConnector:
         except mysql.connector.Error as err:
             print(f"Error executing query: {err}")
             return None
+
