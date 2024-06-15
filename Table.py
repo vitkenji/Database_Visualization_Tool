@@ -1,7 +1,5 @@
 from tkinter import ttk
 
-# TODO: texts that are to big get hidden
-
 class Table:
     def __init__(self, window, data, column_names):
         self.window = window

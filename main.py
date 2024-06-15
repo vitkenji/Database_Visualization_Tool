@@ -3,7 +3,7 @@ from tkinter import ttk
 from MySQLConnector import MySQLConnector
 from Table import Table
 from Tree import Tree
-import json
+import simplejson as json
 
 
 def main():
@@ -12,12 +12,12 @@ def main():
 user_global = ""
 password_global = ""
 db_connector = None
-tree_view = None
+jsonQuery = None
 
 def create_login_window():
     login_window = Tk()
     login_window.title("Databases:")
-    login_window.geometry('400x300')
+    login_window.geometry('500x400')
 
     frm = ttk.Frame(login_window, padding=20)
     frm.grid()
@@ -40,6 +40,7 @@ def create_login_window():
     error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
 
     login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
+
     login_button.grid(column=1, row=3, sticky=(W), pady=5)
 
     login_window.mainloop()
@@ -50,7 +51,13 @@ def login(user_input, pass_input, error_lbl, login_window):
     password = pass_input.get()
     user_global = user
     password_global = password
-    db_connector = MySQLConnector(user, password)
+
+    DEBUG_MODE = True
+    if DEBUG_MODE:
+        db_connector = MySQLConnector('root', 'root')
+    else: 
+        db_connector = MySQLConnector(user, password)
+
     success, schemas = db_connector.connect()
     if success:
         print("successful login")
@@ -68,7 +75,7 @@ def login(user_input, pass_input, error_lbl, login_window):
 def select_schema_window(schemas):
     schema_window = Tk()
     schema_window.title("Select Schema:")
-    schema_window.geometry('400x300')
+    schema_window.geometry('500x400')
 
     frm = ttk.Frame(schema_window, padding=20)
     frm.grid()
@@ -111,14 +118,18 @@ def view_db_window(schema):
     result_frame = ttk.Frame(frm_left)
     result_frame.grid(column=0, row=1, columnspan=3, pady=10, sticky="nsew")
 
+    global jsonQuery
+    save_query_data_button = ttk.Button(frm_left, text="Save Query Data", command=lambda: saveData(jsonQuery, 'queryData.json'))
+    save_query_data_button.grid(row=1, column=0)
+
     frm_right = ttk.Frame(db_window, padding=20)
     frm_right.grid(row=0, column=1, sticky="nsew")
-    save_table_data = ttk.Button(frm_right, text="Save Table Data", command=lambda: saveTableData())
-    save_table_data.grid(row=1, column=0)
 
-    global tree_view
     tree_view = Tree(frm_right, db_connector)
     tree_view.populate_tree(schema)
+
+    save_table_data_button = ttk.Button(frm_right, text="Save Table Data", command=lambda: saveData(tree_view.json, 'treeData.json'))
+    save_table_data_button.grid(row=1, column=0)
 
     db_window.grid_columnconfigure(0, weight=1)
     db_window.grid_columnconfigure(1, weight=1)
@@ -129,22 +140,29 @@ def view_db_window(schema):
 
 def executeQuery(query, db_window):
     global db_connector
+    global jsonQuery
+
     result = db_connector.execute_query(query)
+
     if result:
         column_names = [desc[0] for desc in db_connector.cursor.description] 
+        
+        jsonQuery = [dict(zip(column_names, row)) for row in result]
+
         table = Table(db_window, result, column_names)
         table.create_table()
     else:
         print("error executing query")
 
-def saveTableData():
-    global tree_view
+def saveData(data, filePath):
+    if not data:
+        print("No data to write!")
+        return
     try:
-        with open('data.json', 'w', encoding='utf-8') as json_file:
-            json.dump(tree_view.json, json_file, indent=4)
+        with open(filePath, 'w', encoding='utf-8') as json_file:
+            json.dump(data, json_file, indent=4)
             print(f"Data has been saved!")
     except Exception as e:
-        logging.error("An error occurred while saving the JSON file", exc_info=True)
         print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
