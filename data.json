@@ -1,0 +1,112 @@
+[
+    {
+        "name": "advisor",
+        "field": {
+            "fieldName": "i_ID",
+            "filedType": "varchar(5)",
+            "nullable": "YES",
+            "key": "MUL",
+            "default": null
+        }
+    },
+    {
+        "name": "classroom",
+        "field": {
+            "fieldName": "capacity",
+            "filedType": "decimal(4,0)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "course",
+        "field": {
+            "fieldName": "credits",
+            "filedType": "decimal(2,0)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "department",
+        "field": {
+            "fieldName": "budget",
+            "filedType": "decimal(12,2)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "instructor",
+        "field": {
+            "fieldName": "salary",
+            "filedType": "decimal(8,2)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "prereq",
+        "field": {
+            "fieldName": "prereq_id",
+            "filedType": "varchar(8)",
+            "nullable": "NO",
+            "key": "PRI",
+            "default": null
+        }
+    },
+    {
+        "name": "section",
+        "field": {
+            "fieldName": "time_slot_id",
+            "filedType": "varchar(4)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "student",
+        "field": {
+            "fieldName": "tot_cred",
+            "filedType": "decimal(3,0)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "takes",
+        "field": {
+            "fieldName": "grade",
+            "filedType": "varchar(2)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    },
+    {
+        "name": "teaches",
+        "field": {
+            "fieldName": "year",
+            "filedType": "decimal(4,0)",
+            "nullable": "NO",
+            "key": "PRI",
+            "default": null
+        }
+    },
+    {
+        "name": "time_slot",
+        "field": {
+            "fieldName": "end_min",
+            "filedType": "decimal(2,0)",
+            "nullable": "YES",
+            "key": "",
+            "default": null
+        }
+    }
+]

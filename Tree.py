@@ -1,10 +1,28 @@
 from tkinter import ttk
 
+"""
+
+-- json object syntax --
+[
+    {
+        name: ,
+        field: {
+            fieldName: ,
+            type: ,
+            nullable: ,
+            key: ,
+            default: ,
+        }
+    }
+]
+"""
+
 class Tree:
     def __init__(self, window, db_connector):
         self.window = window
         self.db_connector = db_connector
         self.tree = None
+        self.json = []
 
     def populate_tree(self, schema):
         self.tree = ttk.Treeview(self.window)
@@ -28,13 +46,23 @@ class Tree:
         self.tree.heading("default", text="Default")
 
         tables = self.db_connector.get_tables(schema)
+        print(tables)
         for table in tables:
+            self.json.append({"name": table, "field": {}})
             table_node = self.tree.insert("", "end", text=table)
             columns = self.db_connector.get_columns(schema, table)
             for column in columns:
                 self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
-
+                fieldObj = {
+                    "fieldName": column['Field'],
+                    "filedType": column['Type'],
+                    "nullable": column['Null'],
+                    "key": column['Key'],
+                    "default": column['Default'] 
+                }
+                self.json[-1]['field'] = fieldObj
         self.tree.bind("<Double-1>", self.on_double_click)
+       
 
     def on_double_click(self, event):
         item = self.tree.selection()[0]

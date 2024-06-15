@@ -3,6 +3,7 @@ from tkinter import ttk
 from MySQLConnector import MySQLConnector
 from Table import Table
 from Tree import Tree
+import json
 
 
 def main():
@@ -11,6 +12,7 @@ def main():
 user_global = ""
 password_global = ""
 db_connector = None
+tree_view = None
 
 def create_login_window():
     login_window = Tk()
@@ -111,7 +113,10 @@ def view_db_window(schema):
 
     frm_right = ttk.Frame(db_window, padding=20)
     frm_right.grid(row=0, column=1, sticky="nsew")
+    save_table_data = ttk.Button(frm_right, text="Save Table Data", command=lambda: saveTableData())
+    save_table_data.grid(row=1, column=0)
 
+    global tree_view
     tree_view = Tree(frm_right, db_connector)
     tree_view.populate_tree(schema)
 
@@ -132,6 +137,15 @@ def executeQuery(query, db_window):
     else:
         print("error executing query")
 
+def saveTableData():
+    global tree_view
+    try:
+        with open('data.json', 'w', encoding='utf-8') as json_file:
+            json.dump(tree_view.json, json_file, indent=4)
+            print(f"Data has been saved!")
+    except Exception as e:
+        logging.error("An error occurred while saving the JSON file", exc_info=True)
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
