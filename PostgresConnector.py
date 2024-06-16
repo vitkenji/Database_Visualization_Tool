@@ -53,7 +53,7 @@ class PostgresConnector:
 
     def get_tables(self, schema):
         try:
-            self.cursor.execute(sql.SQL("SELECT table_name FROM information_schema.tables WHERE table_schema = %s"), [schema])
+            self.cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
             tables = [table[0] for table in self.cursor.fetchall()]
             return tables
         except (Exception, psycopg2.DatabaseError) as error:
@@ -62,7 +62,11 @@ class PostgresConnector:
 
     def get_columns(self, schema, table):
         try:
-            self.cursor.execute(sql.SQL("SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_schema = %s AND table_name = %s"), [schema, table])
+            self.cursor.execute(sql.SQL("""
+                SELECT column_name, data_type, is_nullable, column_default
+                FROM information_schema.columns 
+                WHERE table_schema = 'public' AND table_name = %s
+            """), [table])
             columns = []
             for column in self.cursor.fetchall():
                 column_info = {

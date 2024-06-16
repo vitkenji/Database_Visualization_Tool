@@ -32,37 +32,33 @@ class Tree:
         vsb.grid(column=1, row=0, sticky='ns')
         self.tree.configure(yscrollcommand=vsb.set)
 
-        self.tree["columns"] = ("type", "null", "key", "default")
+        self.tree["columns"] = ("type", "null", "default")
         self.tree.column("#0", width=150)
         self.tree.column("type", width=100)
-        self.tree.column("key", width=100)
         self.tree.column("null", width=100)
         self.tree.column("default", width=100)
 
         self.tree.heading("#0", text="Table")
         self.tree.heading("type", text="Type")
-        self.tree.heading("key", text="Key")
         self.tree.heading("null", text="Nullable")
         self.tree.heading("default", text="Default")
 
         tables = self.db_connector.get_tables(schema)
         print(tables)
         for table in tables:
-            self.json.append({"name": table, "field": {}})
+            self.json.append({"name": table, "fields": []})
             table_node = self.tree.insert("", "end", text=table)
             columns = self.db_connector.get_columns(schema, table)
             for column in columns:
-                self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
+                self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Default']))
                 fieldObj = {
                     "fieldName": column['Field'],
-                    "filedType": column['Type'],
+                    "fieldType": column['Type'],
                     "nullable": column['Null'],
-                    "key": column['Key'],
-                    "default": column['Default'] 
+                    "default": column['Default']
                 }
-                self.json[-1]['field'] = fieldObj
+                self.json[-1]['fields'].append(fieldObj)
         self.tree.bind("<Double-1>", self.on_double_click)
-       
 
     def on_double_click(self, event):
         item = self.tree.selection()[0]
@@ -74,4 +70,4 @@ class Tree:
             table = self.tree.item(item, "text")
             columns = self.db_connector.get_columns(database, table)
             for column in columns:
-                self.tree.insert(item, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
+                self.tree.insert(item, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Default']))
