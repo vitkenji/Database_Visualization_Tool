@@ -168,14 +168,22 @@ def executeQuery(query, limit, db_window):
     global db_connector
     global jsonQuery
 
+    if query[-1] == ';':
+        query = query[:-1] # Remove last character
 
-    if limit != "":
+    try: 
         limit = int(limit)
-        if not isinstance(limit, int):
-            print('Limit it not a number')
-            return 
+    except:
+        limit = None
 
-    result = db_connector.execute_query(query, limit)
+    if isinstance(limit, int) and limit > 0:
+        query = query + ' limit ' + str(limit) + ';'
+    else:
+        query = query + ' limit 1000;'
+
+    db_connector.execute_query(query)
+
+    result = db_connector.execute_query(query)
 
     if result:
         column_names = [desc[0] for desc in db_connector.cursor.description] 

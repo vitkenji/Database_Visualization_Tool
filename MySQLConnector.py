@@ -74,16 +74,10 @@ class MySQLConnector:
             print(f"Error: {err}")
             return []
 
-    def execute_query(self, query, limit):
+    def execute_query(self, query):
         try:
             print(query)
-            if query[-1] == ';':
-                query = query[:-1] # Remove last character
-
-            if isinstance(limit, int):
-                self.cursor.execute(query + ' limit ' + str(limit) + ';')
-            else:
-                self.cursor.execute(query + ' limit 1000;')
+            self.cursor.execute(query)
             result = self.cursor.fetchall()
             return result
         except mysql.connector.Error as err:
