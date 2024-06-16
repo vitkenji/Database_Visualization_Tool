@@ -4,7 +4,7 @@ from MySQLConnector import MySQLConnector
 from PostgresConnector import PostgresConnector
 from Table import Table
 from Tree import Tree
-import simplejson as json
+from jsonFunctions import saveData, readData, removeFile
 
 
 def main():
@@ -12,6 +12,7 @@ def main():
 
 user_global = ""
 password_global = ""
+remeber_user_var = None
 db_connector = None
 jsonQuery = None
 db_type_var = None
@@ -28,6 +29,12 @@ def create_login_window():
     
     ttk.Label(frm, text="User: ").grid(column=0, row=0, sticky=E, pady=5)
     user_input = ttk.Entry(frm)
+
+    login_saved_data = readData("loginData.json")
+
+    if login_saved_data:
+        user_input.insert(0, login_saved_data)
+
     user_input.grid(column=1, row=0, sticky=(W, E), pady=5)
 
     ttk.Label(frm, text="Password: ").grid(column=0, row=1, sticky=E, pady=5)
@@ -40,16 +47,23 @@ def create_login_window():
     db_type_combo.grid(column=1, row=2, sticky=(W, E), pady=5)
     db_type_combo.current(0)
 
+
+    global remeber_user_var
+    remeber_user_var = IntVar()
+    remeber_user_checkbox = ttk.Checkbutton(frm, text="Remeber login data?", variable=remeber_user_var)
+    remeber_user_checkbox.grid(column=1, row=3)
+
+
     error_lbl = Label(frm, text="", fg="red")
     error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
 
     login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
-    login_button.grid(column=1, row=3, sticky=(W), pady=5)
+    login_button.grid(column=1, row=4, sticky=(W), pady=5)
 
     login_window.mainloop()
 
 def login(user_input, pass_input, error_lbl, login_window):
-    global user_global, password_global, db_connector, db_type_var
+    global user_global, password_global, db_connector, db_type_var, remeber_user_var
     user = user_input.get()
     password = pass_input.get()
     db_type = db_type_var.get()
@@ -64,6 +78,12 @@ def login(user_input, pass_input, error_lbl, login_window):
     success, schemas = db_connector.connect()
     if success:
         print("successful login")
+
+        if remeber_user_var.get():
+            saveData(user_input.get(), "loginData.json")
+        else:
+            removeFile("loginData.json")
+
         error_lbl.config(text="")
         login_window.destroy()
         select_schema_window(schemas)
@@ -156,16 +176,6 @@ def executeQuery(query, db_window):
     else:
         print("error executing query")
 
-def saveData(data, filePath):
-    if not data:
-        print("No data to write!")
-        return
-    try:
-        with open(filePath, 'w', encoding='utf-8') as json_file:
-            json.dump(data, json_file, indent=4)
-            print(f"Data has been saved!")
-    except Exception as e:
-        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
