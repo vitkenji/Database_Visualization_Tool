@@ -52,12 +52,12 @@ class Tree:
             table_node = self.tree.insert("", "end", text=table)
             columns = self.db_connector.get_columns(schema, table)
             for column in columns:
-                print(column)
                 self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
                 fieldObj = {
                     "fieldName": column['Field'],
                     "fieldType": column['Type'],
                     "nullable": column['Null'],
+                    "key": column['Key'],
                     "default": column['Default']
                 }
                 self.json[-1]['fields'].append(fieldObj)

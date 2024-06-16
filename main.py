@@ -135,15 +135,19 @@ def view_db_window(schema):
     query = ttk.Entry(frm_left, width=50)
     query.grid(column=1, row=0, sticky=(W, E), pady=5)
 
-    execute_button = ttk.Button(frm_left, text="Execute", command=lambda: executeQuery(query.get(), db_window))
+    execute_button = ttk.Button(frm_left, text="Execute", command=lambda: executeQuery(query.get(), limit_entry.get(), db_window))
     execute_button.grid(column=2, row=0, sticky=(W), pady=5)
 
+    ttk.Label(frm_left, text="Limit: ").grid(column=0, row=1, sticky=E, pady=5)
+    limit_entry = ttk.Entry(frm_left, width=50)
+    limit_entry.grid(column=1, row=1, sticky=(W, E), pady=5)
+
     result_frame = ttk.Frame(frm_left)
-    result_frame.grid(column=0, row=1, columnspan=3, pady=10, sticky="nsew")
+    result_frame.grid(column=0, row=2, columnspan=3, pady=10, sticky="nsew")
 
     global jsonQuery
     save_query_data_button = ttk.Button(frm_left, text="Save Query Data", command=lambda: saveData(jsonQuery, 'queryData.json'))
-    save_query_data_button.grid(row=1, column=0)
+    save_query_data_button.grid(row=2, column=0)
 
     frm_right = ttk.Frame(db_window, padding=20)
     frm_right.grid(row=0, column=1, sticky="nsew")
@@ -160,11 +164,18 @@ def view_db_window(schema):
 
     db_window.mainloop()
 
-def executeQuery(query, db_window):
+def executeQuery(query, limit, db_window):
     global db_connector
     global jsonQuery
 
-    result = db_connector.execute_query(query)
+
+    if limit != "":
+        limit = int(limit)
+        if not isinstance(limit, int):
+            print('Limit it not a number')
+            return 
+
+    result = db_connector.execute_query(query, limit)
 
     if result:
         column_names = [desc[0] for desc in db_connector.cursor.description] 

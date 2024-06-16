@@ -6,7 +6,7 @@ def saveData(data, filePath):
         return
     try:
         with open(filePath, 'w', encoding='utf-8') as json_file:
-            json.dump(data, json_file, indent=4)
+            json.dump(data, json_file, indent=4, default=str)
             print(f"Data has been saved!")
     except Exception as e:
         print(f"An error occurred: {e}")

@@ -1,331 +1,257 @@
 [
     {
-        "name": "advisor",
+        "name": "current_dept_emp",
         "fields": [
             {
-                "fieldName": "s_ID",
-                "fieldType": "varchar(5)",
+                "fieldName": "emp_no",
+                "fieldType": "int",
                 "nullable": "NO",
+                "key": "",
                 "default": null
             },
             {
-                "fieldName": "i_ID",
-                "fieldType": "varchar(5)",
+                "fieldName": "dept_no",
+                "fieldType": "char(4)",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "from_date",
+                "fieldType": "date",
                 "nullable": "YES",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "to_date",
+                "fieldType": "date",
+                "nullable": "YES",
+                "key": "",
                 "default": null
             }
         ]
     },
     {
-        "name": "classroom",
+        "name": "departments",
         "fields": [
             {
-                "fieldName": "building",
-                "fieldType": "varchar(15)",
+                "fieldName": "dept_no",
+                "fieldType": "char(4)",
                 "nullable": "NO",
+                "key": "PRI",
                 "default": null
             },
             {
-                "fieldName": "room_number",
-                "fieldType": "varchar(7)",
+                "fieldName": "dept_name",
+                "fieldType": "varchar(40)",
                 "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "capacity",
-                "fieldType": "decimal(4,0)",
-                "nullable": "YES",
+                "key": "UNI",
                 "default": null
             }
         ]
     },
     {
-        "name": "course",
+        "name": "dept_emp",
         "fields": [
             {
-                "fieldName": "course_id",
-                "fieldType": "varchar(8)",
+                "fieldName": "emp_no",
+                "fieldType": "int",
                 "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "dept_no",
+                "fieldType": "char(4)",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "from_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "to_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            }
+        ]
+    },
+    {
+        "name": "dept_emp_latest_date",
+        "fields": [
+            {
+                "fieldName": "emp_no",
+                "fieldType": "int",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "from_date",
+                "fieldType": "date",
+                "nullable": "YES",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "to_date",
+                "fieldType": "date",
+                "nullable": "YES",
+                "key": "",
+                "default": null
+            }
+        ]
+    },
+    {
+        "name": "dept_manager",
+        "fields": [
+            {
+                "fieldName": "emp_no",
+                "fieldType": "int",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "dept_no",
+                "fieldType": "char(4)",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "from_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "to_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            }
+        ]
+    },
+    {
+        "name": "employees",
+        "fields": [
+            {
+                "fieldName": "emp_no",
+                "fieldType": "int",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "birth_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "first_name",
+                "fieldType": "varchar(14)",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "last_name",
+                "fieldType": "varchar(16)",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "gender",
+                "fieldType": "enum('M','F')",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "hire_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            }
+        ]
+    },
+    {
+        "name": "salaries",
+        "fields": [
+            {
+                "fieldName": "emp_no",
+                "fieldType": "int",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "salary",
+                "fieldType": "int",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            },
+            {
+                "fieldName": "from_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "to_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "",
+                "default": null
+            }
+        ]
+    },
+    {
+        "name": "titles",
+        "fields": [
+            {
+                "fieldName": "emp_no",
+                "fieldType": "int",
+                "nullable": "NO",
+                "key": "PRI",
                 "default": null
             },
             {
                 "fieldName": "title",
                 "fieldType": "varchar(50)",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "from_date",
+                "fieldType": "date",
+                "nullable": "NO",
+                "key": "PRI",
+                "default": null
+            },
+            {
+                "fieldName": "to_date",
+                "fieldType": "date",
                 "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "dept_name",
-                "fieldType": "varchar(20)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "credits",
-                "fieldType": "decimal(2,0)",
-                "nullable": "YES",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "department",
-        "fields": [
-            {
-                "fieldName": "dept_name",
-                "fieldType": "varchar(20)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "building",
-                "fieldType": "varchar(15)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "budget",
-                "fieldType": "decimal(12,2)",
-                "nullable": "YES",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "instructor",
-        "fields": [
-            {
-                "fieldName": "ID",
-                "fieldType": "varchar(5)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "name",
-                "fieldType": "varchar(20)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "dept_name",
-                "fieldType": "varchar(20)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "salary",
-                "fieldType": "decimal(8,2)",
-                "nullable": "YES",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "prereq",
-        "fields": [
-            {
-                "fieldName": "course_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "prereq_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "section",
-        "fields": [
-            {
-                "fieldName": "course_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "sec_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "semester",
-                "fieldType": "varchar(6)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "year",
-                "fieldType": "decimal(4,0)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "building",
-                "fieldType": "varchar(15)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "room_number",
-                "fieldType": "varchar(7)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "time_slot_id",
-                "fieldType": "varchar(4)",
-                "nullable": "YES",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "student",
-        "fields": [
-            {
-                "fieldName": "ID",
-                "fieldType": "varchar(5)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "name",
-                "fieldType": "varchar(20)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "dept_name",
-                "fieldType": "varchar(20)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "tot_cred",
-                "fieldType": "decimal(3,0)",
-                "nullable": "YES",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "takes",
-        "fields": [
-            {
-                "fieldName": "ID",
-                "fieldType": "varchar(5)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "course_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "sec_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "semester",
-                "fieldType": "varchar(6)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "year",
-                "fieldType": "decimal(4,0)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "grade",
-                "fieldType": "varchar(2)",
-                "nullable": "YES",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "teaches",
-        "fields": [
-            {
-                "fieldName": "ID",
-                "fieldType": "varchar(5)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "course_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "sec_id",
-                "fieldType": "varchar(8)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "semester",
-                "fieldType": "varchar(6)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "year",
-                "fieldType": "decimal(4,0)",
-                "nullable": "NO",
-                "default": null
-            }
-        ]
-    },
-    {
-        "name": "time_slot",
-        "fields": [
-            {
-                "fieldName": "time_slot_id",
-                "fieldType": "varchar(4)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "day",
-                "fieldType": "varchar(1)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "start_hr",
-                "fieldType": "decimal(2,0)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "start_min",
-                "fieldType": "decimal(2,0)",
-                "nullable": "NO",
-                "default": null
-            },
-            {
-                "fieldName": "end_hr",
-                "fieldType": "decimal(2,0)",
-                "nullable": "YES",
-                "default": null
-            },
-            {
-                "fieldName": "end_min",
-                "fieldType": "decimal(2,0)",
-                "nullable": "YES",
+                "key": "",
                 "default": null
             }
         ]
