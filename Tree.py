@@ -32,15 +32,17 @@ class Tree:
         vsb.grid(column=1, row=0, sticky='ns')
         self.tree.configure(yscrollcommand=vsb.set)
 
-        self.tree["columns"] = ("type", "null", "default")
+        self.tree["columns"] = ("type", "null", "key", "default")
         self.tree.column("#0", width=150)
         self.tree.column("type", width=100)
         self.tree.column("null", width=100)
+        self.tree.column("key", width=100)
         self.tree.column("default", width=100)
 
         self.tree.heading("#0", text="Table")
         self.tree.heading("type", text="Type")
         self.tree.heading("null", text="Nullable")
+        self.tree.heading("key", text="Key")
         self.tree.heading("default", text="Default")
 
         tables = self.db_connector.get_tables(schema)
@@ -50,7 +52,8 @@ class Tree:
             table_node = self.tree.insert("", "end", text=table)
             columns = self.db_connector.get_columns(schema, table)
             for column in columns:
-                self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Default']))
+                print(column)
+                self.tree.insert(table_node, "end", text=column['Field'], values=(column['Type'], column['Null'], column['Key'], column['Default']))
                 fieldObj = {
                     "fieldName": column['Field'],
                     "fieldType": column['Type'],
