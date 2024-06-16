@@ -143,7 +143,7 @@ def view_db_window(schema):
     limit_entry.grid(column=1, row=1, sticky=(W, E), pady=5)
 
     result_frame = ttk.Frame(frm_left)
-    result_frame.grid(column=0, row=2, columnspan=3, pady=10, sticky="nsew")
+    result_frame.grid(column=0, row=2, columnspan=3, pady=10, sticky=(N))
 
     global jsonQuery
     save_query_data_button = ttk.Button(frm_left, text="Save Query Data", command=lambda: saveData(jsonQuery, 'queryData.json'))
@@ -168,18 +168,20 @@ def executeQuery(query, limit, db_window):
     global db_connector
     global jsonQuery
 
-    if query[-1] == ';':
-        query = query[:-1] # Remove last character
+    if query.split()[0] == 'select':
+        print(query)
+        if query[-1] == ';':
+            query = query[:-1] # Remove last character
 
-    try: 
-        limit = int(limit)
-    except:
-        limit = None
+        try: 
+            limit = int(limit)
+        except:
+            limit = None
 
-    if isinstance(limit, int) and limit > 0:
-        query = query + ' limit ' + str(limit) + ';'
-    else:
-        query = query + ' limit 1000;'
+        if isinstance(limit, int) and limit > 0:
+            query = query + ' limit ' + str(limit) + ';'
+        else:
+            query = query + ' limit 1000;'
 
     db_connector.execute_query(query)
 
