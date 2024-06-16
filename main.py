@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from MySQLConnector import MySQLConnector
+from PostgresConnector import PostgresConnector
 from Table import Table
 from Tree import Tree
 import simplejson as json
@@ -13,8 +14,11 @@ user_global = ""
 password_global = ""
 db_connector = None
 jsonQuery = None
+db_type_var = None
 
 def create_login_window():
+    global db_type_var  # Certifique-se de que db_type_var é global
+
     login_window = Tk()
     login_window.title("Databases:")
     login_window.geometry('500x400')
@@ -40,23 +44,22 @@ def create_login_window():
     error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
 
     login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
-
     login_button.grid(column=1, row=3, sticky=(W), pady=5)
 
     login_window.mainloop()
 
 def login(user_input, pass_input, error_lbl, login_window):
-    global user_global, password_global, db_connector
+    global user_global, password_global, db_connector, db_type_var
     user = user_input.get()
     password = pass_input.get()
+    db_type = db_type_var.get()
     user_global = user
     password_global = password
 
-    DEBUG_MODE = True
-    if DEBUG_MODE:
-        db_connector = MySQLConnector('root', 'root')
-    else: 
+    if db_type == "MySQL":
         db_connector = MySQLConnector(user, password)
+    else:
+        db_connector = PostgresConnector(user, password)
 
     success, schemas = db_connector.connect()
     if success:
@@ -71,7 +74,7 @@ def login(user_input, pass_input, error_lbl, login_window):
         else:
             print("error")
             error_lbl.config(text="user and/or password incorrect")
-  
+
 def select_schema_window(schemas):
     schema_window = Tk()
     schema_window.title("Select Schema:")
@@ -136,7 +139,6 @@ def view_db_window(schema):
     db_window.grid_rowconfigure(0, weight=1)
 
     db_window.mainloop()
-
 
 def executeQuery(query, db_window):
     global db_connector

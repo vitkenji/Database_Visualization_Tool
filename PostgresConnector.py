@@ -1,75 +1,80 @@
 import psycopg2
-
-# Só ctr c ctr v do código do MySQL
+from psycopg2 import sql
 
 class PostgresConnector:
-    def __init__(self, user, password):
+    def __init__(self, user, password, host='localhost', port=5432):
         self.user = user
         self.password = password
-        self.mydb = None
+        self.host = host
+        self.port = port
+        self.connection = None
         self.cursor = None
 
     def connect(self):
         try:
-            connection = psycopg2.connect(
-                user="root",
-                password="root",
-                host="localhost",
-                port=3306
+            self.connection = psycopg2.connect(
+                user=self.user,
+                password=self.password,
+                host=self.host,
+                port=self.port
             )
+            self.cursor = self.connection.cursor()
+            self.cursor.execute("SELECT datname FROM pg_database WHERE datistemplate = false;")
+            schemas = self.cursor.fetchall()
+            return True, schemas
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"Error: {error}")
+            return False, []
 
     def select_schema(self, schema):
         try:
-            self.mydb = mysql.connector.connect(
-                host="localhost",
+            self.connection.close()
+            self.connection = psycopg2.connect(
                 user=self.user,
                 password=self.password,
-                database=schema
+                host=self.host,
+                port=self.port,
+                dbname=schema
             )
-            self.cursor = self.mydb.cursor()
+            self.cursor = self.connection.cursor()
             return True
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Error: {error}")
             return False
 
     def get_databases(self):
         try:
-            self.cursor.execute("SHOW DATABASES")
+            self.cursor.execute("SELECT datname FROM pg_database WHERE datistemplate = false;")
             databases = [db[0] for db in self.cursor.fetchall()]
             return databases
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Error: {error}")
             return []
 
-    def get_tables(self, database):
+    def get_tables(self, schema):
         try:
-            self.cursor.execute(f"USE {database}")
-            self.cursor.execute("SHOW TABLES")
+            self.cursor.execute(sql.SQL("SELECT table_name FROM information_schema.tables WHERE table_schema = %s"), [schema])
             tables = [table[0] for table in self.cursor.fetchall()]
             return tables
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Error: {error}")
             return []
 
-    def get_columns(self, database, table):
+    def get_columns(self, schema, table):
         try:
-            self.cursor.execute(f"USE {database}")
-            self.cursor.execute(f"DESCRIBE `{table}`")
+            self.cursor.execute(sql.SQL("SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_schema = %s AND table_name = %s"), [schema, table])
             columns = []
             for column in self.cursor.fetchall():
                 column_info = {
                     'Field': column[0],
                     'Type': column[1],
                     'Null': column[2],
-                    'Key': column[3],
-                    'Default': column[4]
+                    'Default': column[3]
                 }
                 columns.append(column_info)
             return columns
-        except mysql.connector.Error as err:
-            print(f"Error: {err}")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Error: {error}")
             return []
 
     def execute_query(self, query):
@@ -77,7 +82,6 @@ class PostgresConnector:
             self.cursor.execute(query)
             result = self.cursor.fetchall()
             return result
-        except mysql.connector.Error as err:
-            print(f"Error executing query: {err}")
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"Error executing query: {error}")
             return None
-
