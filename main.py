@@ -18,7 +18,7 @@ jsonQuery = None
 db_type_var = None
 
 def create_login_window():
-    global db_type_var  # Certifique-se de que db_type_var é global
+    global db_type_var 
 
     login_window = Tk()
     login_window.title("Databases:")
@@ -158,11 +158,20 @@ def view_db_window(schema):
     save_table_data_button = ttk.Button(frm_right, text="Save Table Data", command=lambda: saveData(tree_view.json, 'treeData.json'))
     save_table_data_button.grid(row=1, column=0)
 
+    frm_bottom = ttk.Frame(db_window, padding=20, padx=10)
+    frm_bottom.grid(row=0, column=2, sticky="nsew")
+
+    table = Table(frm_bottom, [], [])  
+    table.create_table()
+
     db_window.grid_columnconfigure(0, weight=1)
     db_window.grid_columnconfigure(1, weight=1)
+    db_window.grid_columnconfigure(2, weight=1)
     db_window.grid_rowconfigure(0, weight=1)
 
     db_window.mainloop()
+
+
 
 def executeQuery(query, limit, db_window):
     global db_connector
