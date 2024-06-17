@@ -55,7 +55,7 @@ def create_login_window():
 
 
     error_lbl = Label(frm, text="", fg="red")
-    error_lbl.grid(column=1, row=4, columnspan=2, sticky=(W), pady=5)
+    error_lbl.grid(column=1, row=5, columnspan=2, sticky=(W), pady=5)
 
     login_button = ttk.Button(frm, text="Login", command=lambda: login(user_input, pass_input, error_lbl, login_window))
     login_button.grid(column=1, row=4, sticky=(W), pady=5)

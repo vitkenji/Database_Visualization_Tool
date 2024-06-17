@@ -48,7 +48,7 @@ class MySQLConnector:
     def get_tables(self, database):
         try:
             self.cursor.execute(f"USE {database}")
-            self.cursor.execute("SHOW TABLES")
+            self.cursor.execute("SHOW FULL TABLES WHERE TABLE_TYPE IN ('BASE TABLE', 'VIEW');")
             tables = [table[0] for table in self.cursor.fetchall()]
             return tables
         except mysql.connector.Error as err:
@@ -76,7 +76,6 @@ class MySQLConnector:
 
     def execute_query(self, query):
         try:
-            print(query)
             self.cursor.execute(query)
             result = self.cursor.fetchall()
             return result
@@ -84,3 +83,12 @@ class MySQLConnector:
             print(f"Error executing query: {err}")
             return None
 
+    def get_views(self, database):
+        try:
+            self.cursor.execute(f"USE {database}")
+            self.cursor.execute("SHOW TABLES")
+            tables = [table[0] for table in self.cursor.fetchall()]
+            return tables
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            return []
