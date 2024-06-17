@@ -50,7 +50,7 @@ def create_login_window():
 
     global remeber_user_var
     remeber_user_var = IntVar()
-    remeber_user_checkbox = ttk.Checkbutton(frm, text="Remeber login data?", variable=remeber_user_var)
+    remeber_user_checkbox = ttk.Checkbutton(frm, text="Remember login data", variable=remeber_user_var)
     remeber_user_checkbox.grid(column=1, row=3)
 
 
