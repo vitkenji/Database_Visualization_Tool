@@ -1,31 +1,23 @@
-# databaseVisualization
+# **Database Visualization**
 
-Ferramenta "semi-gráfica" de visualização de bancos de dados
+## **Description**
 
-OBSERVAÇÕES:
- - este trabalho poderá ser realizado em equipes de até 2 pessoas
- - o trabalho deverá ser entregue com os códigos fontes em Python ou Java, e um relatório mostrando as funcionalidades e utilização do programa, além de detalhes da sua instalação e dependências
- - a entrega deverá ser feita por somente um dos alunos da dupla
- - o programa será testado em sistema operacional Linux, com Python 3.10.x
+This project is a semi-graphical tool for database visualization, allowing users to explore PostgreSQL and MySQL databases interactively and intuitively. Through a simple graphical interface, users can view tables, fields, primary keys, query data, and export results in CSV or JSON formats.
 
+## **Features**
 
-Desenvolver um programa em Python/Java (interface texto) com as seguintes características:
+- **Connect to PostgreSQL and MySQL Databases:** The program allows connection to both PostgreSQL and MySQL databases.
+- **Save Connection Data:** The program stores connection information, making it easier to access recurring databases.
+- **View Tables and Views:** Displays the tables and views of the database in a tree structure.
+- **Show Table Fields:** Shows the fields of each table, including their types and sizes.
+- **Primary Keys:** Indicates the primary keys of each table.
+- **Query Data:** Allows querying the data of a table, with the option to limit the number of records displayed (up to 1000, configurable).
+- **Run SQL Queries:** Users can input and execute SQL queries directly.
+- **Export Data:** Provides options to export table data or query results in CSV or JSON formats.
 
-   - Permitir a conexão a bancos de dados PostgreSQL e MySQL
+## **Technologies Used**
 
-   - Gravar dados de conexão
-
-   - Mostrar graficamente (em árvore) as tabelas e views do banco de dados
-
-   - Mostrar também os campos da tabela e seus tipos e tamanhos
-   - Apontar as chaves primárias de cada tabela
-
-   - Consultar os dados da tabela
-
-   - Dados mostrados em estrutura de tabela
-   - Mostrar todos os dados (limitado a 1000 registros - configurável)
-   - Permitir consultas gerais (digitando o SQL diretamente)
-
-   - Exportação de dados das tabelas e das consultas em CSV ou JSON
-
-AS OPÇÕES DE ESCOLHA DE INTERFACE SÃO A CARGO DA EQUIPE.
+- **Python**
+- **Tkinter**
+- **psycopg2**
+- **mysql-connector-python**
